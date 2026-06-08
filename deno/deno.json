@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@delbio/automata": "npm:@delbio/automata@^2.0.1"
+  }
+}

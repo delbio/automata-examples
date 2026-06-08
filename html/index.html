@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"></meta>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+  </head>
+  <body>
+    <pre id="console"></pre>
+
+    <script type="module">
+        import {
+            Action,
+            Automaton,
+            State,
+        } from "https://unpkg.com/@delbio/automata@2.0.0/src/index.js"
+
+        // States
+        class Nuovo extends State {}
+        class Cancellato extends State {}
+        class Pubblicabile extends State {}
+        class Pubblicato extends State {}
+        // Classes
+        class Elimina extends Action {}
+        class Modifica extends Action {}
+        class Pubblica extends Action {}
+
+        const nuovo = new Nuovo()
+        const cancellato = new Cancellato()
+        const pubblicabile = new Pubblicabile()
+        const pubblicato = new Pubblicato()
+
+        nuovo.addAction(new Elimina(nuovo, cancellato))
+        nuovo.addAction(new Modifica(nuovo, pubblicabile))
+
+        pubblicabile.addAction(new Elimina(pubblicabile, cancellato))
+        pubblicabile.addAction(new Pubblica(pubblicabile, pubblicato))
+        pubblicabile.addAction(new Modifica(pubblicabile, pubblicabile))
+
+        pubblicato.addAction(new Modifica(pubblicato, pubblicabile))
+
+        const automaton = new Automaton()
+        for (let s of [nuovo, cancellato, pubblicabile, pubblicato]) {
+            automaton.addState(s)
+        }
+        automaton.addEnd(cancellato)
+        automaton.setBegin(nuovo)
+
+
+        const consoleDomEl = document.getElementById('console')
+        function writeLine(message) {
+            const textNode = document.createTextNode(message)
+            consoleDomEl.appendChild(textNode)
+            consoleDomEl.appendChild(document.createElement('br'))
+        }
+
+        writeLine('Automaton definition:')
+        writeLine(automaton.toString())
+        writeLine('Check automaton integrity ...')
+        automaton.checkIntegrity()
+        writeLine('Passed ;)')
+
+        const doThenMove = function (a) {
+            automaton.doAction(a)
+            automaton.move(a)
+        }
+        const curretAutomatonState = function () {
+            writeLine(`Current: ${automaton.getCurrentState().toString()}`)
+        }
+
+        writeLine(`Set currentState: ${nuovo.toString()}`)
+        automaton.setCurrentState(nuovo)
+        curretAutomatonState()
+        for (let a of ['Modifica', 'Pubblica', 'Modifica', 'Modifica', 'Elimina']) {
+            writeLine(`Exec action: ${a.toString()}`)
+            doThenMove(a)
+            curretAutomatonState()
+        }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "version": "5",
+  "specifiers": {
+    "npm:@delbio/automata@^2.0.1": "2.0.1"
+  },
+  "npm": {
+    "@delbio/automata@2.0.1": {
+      "integrity": "sha512-UUGiTD+TEA/MAutUFklR+yLLa+2OsLWTZOsp8ziMnrnScfT8FmClxBGm7bntasO/MOaoOn/LLkGrD0FJit0s/Q=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:@delbio/automata@^2.0.1"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "",
+  "version": "",
+  "dependencies": {
+    "@delbio/automata": "^2.0.1"
+  }
+}
